@@ -18,14 +18,23 @@ class User:
     # =============================================
     @classmethod
     def all_users(cls):
+        #1 - define your query
         query = "SELECT * FROM users;"
+
+        #2 - call on the connectToMySQL to run query
         results = connectToMySQL('twitter').query_db(query)
+
+        #2a - print raw response
         print(results)
+
+        #3 - parse raw data into instance and store the instances in a new list
         users = []
         for user_data in  results:
             # User(user_data)
             # user = cls(user_data)
             users.append(cls(user_data))
+
+        #4 - return new list of instances
         return users
 
     # =============================================
@@ -33,9 +42,17 @@ class User:
     # =============================================
     @classmethod
     def one_user(cls, data):
+        #1 - define your query
         query = "SELECT * FROM users WHERE id = %(user_id)s;"
+
+        #2 - call on the connectToMySQL to run query
         results = connectToMySQL('twitter').query_db(query, data)
+
+        #2a - print raw response
         print(results)
+
+        #4 - return instance of item at location 0 because you only queried for 1 item 
+        # (see lecture about "Querying with Variables" for more explanation!)
         return cls(results[0])
 
     # =============================================
