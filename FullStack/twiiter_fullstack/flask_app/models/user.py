@@ -2,14 +2,17 @@ from flask_app.config.mysqlconnection import connectToMySQL
 
 class User:
     def __init__(self, data):
+        # ID field should be set to PK, NN, and AI in database so will be automatically generated
         self.id = data['id']
 
+        # these are the main attributes that are unique to the individual instances
         self.first_name = data['first_name']
         self.last_name = data['last_name']
         self.handle = data['handle']
         self.birthday = data['birthday']
         self.age = data['age']
 
+        # these are also 'default' fields, but we need to give them values when updating or creating
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
@@ -60,8 +63,15 @@ class User:
     # =============================================
     @classmethod
     def create_user(cls, data):
+        #1 - define your query
         query = "INSERT INTO users (first_name, last_name, handle, birthday, age, created_at) VALUES (%(first_name)s, %(last_name)s, %(handle)s, %(birthday)s, %(age)s, NOW());"
+        
+        #2 - call on the connectToMySQL to run query
         results = connectToMySQL('twitter').query_db(query, data)
+
+        #2a - print raw response
         print(results)
+
+        #4 - return query response - because this is an INSERT it will return the ID of the new record 
         return results
 
